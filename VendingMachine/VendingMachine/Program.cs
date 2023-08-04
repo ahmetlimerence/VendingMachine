@@ -6,7 +6,7 @@ internal class Program
     private static void Main(string[] args)
     {
         VendingMachine.Machine _machine = new VendingMachine.Machine();
-        _machine.GiveProduct(1);
+        _machine.Inıt();
     }
   
 }

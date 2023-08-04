@@ -15,38 +15,64 @@ namespace VendingMachine
         {
             FillTheMachine();
         }
-        public void ListProducts()
+        public void Inıt()
+        {
+            Console.WriteLine("For Product List pls press I");
+            string _input = Console.ReadLine();
+            if (_input.ToLower() == "i")
+            {
+                ListProducts();
+            }
+            else
+            {
+                throw new ArgumentException("Please Enter A valid Value");
+            }
+
+        }
+        private void ListProducts()
         {
             foreach (var product in _products)
             {
                 Console.WriteLine(product.ProductNumber + "=>   " + product.Name +"  $" + product.Price);
             }
+            Console.WriteLine("Please Enter a Product Number");
+            int productNumber = int.Parse(Console.ReadLine());
+            GiveProduct(productNumber);
         }
         public void GiveProduct(int productNumber)
         {
-            foreach(var product in _products)
+            if(IsProductNumberValid(productNumber))
             {
-                if(product.ProductNumber == productNumber)
+                for (int i = 0; i < _products.Length; i++)
                 {
-                    
-                    if(_balance >= product.Price)
+                    if (_products[i].ProductNumber == productNumber)
                     {
-                        Console.WriteLine(product.Name);
-                        Console.WriteLine("Your Product is " + product.Name);
-                        Console.WriteLine("Yor Exchange is " + (_balance - product.Price));
-                        _balance = 0;
+
+                        if (_balance >= _products[i].Price)
+                        {
+
+                            Console.WriteLine("Your Product is " + _products[i].Name);
+                            Console.WriteLine("Yor Exchange is " + (_balance - _products[i].Price));
+                            _balance = 0;
+                        }
+                        else
+                        {
+                            GetMoney();
+                            GiveProduct(productNumber);
+                        }
+
+
                     }
-                    else
-                    {
-                        GetMoney();
-                        GiveProduct(productNumber);
-                    }
-                }
-                else
-                {
-                    throw new ArgumentException("Enter a valid value");
                 }
             }
+            if(!IsProductNumberValid(productNumber))
+            {
+                Console.Clear();
+                Console.WriteLine("Your Product Number was Invalid please check the lsit again");
+                ListProducts();
+            }
+           
+
         }
         public void GetMoney()
         {
@@ -56,6 +82,15 @@ namespace VendingMachine
                 throw new ArgumentException("Pls Enter a valid value");
             _balance += _input;
 
+        }
+        private bool IsProductNumberValid(int productNumber)
+        {
+            foreach (var product in _products)
+            {
+                if(product.ProductNumber == productNumber)
+                    return true;
+            }
+            return false;
         }
 
         void FillTheMachine()
